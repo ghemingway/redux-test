@@ -1,0 +1,6 @@
+node_modules/*
+.idea/*
+public/*
+!public/favicon.ico
+!public/index.html
+notes.txt

@@ -1,6 +1,6 @@
 
 import { push }                         from 'react-router-redux';
-import { loginSuccess, loginError }     from '../actions/actions';
+import { loginSuccess, loginError }     from '../actions/login';
 
 export const loginMiddleware = ({ getState, dispatch }) => next => action => {
     if (action.type === 'LOGIN:REQUEST') {
@@ -24,8 +24,9 @@ export const loginMiddleware = ({ getState, dispatch }) => next => action => {
                 });
             })
             .then(user => {
+                const path = action.return ? action.return : `/profile/${user.username}`;
                 dispatch(loginSuccess(user));
-                dispatch(push(`/profile/${user.username}`));
+                dispatch(push(path));
             })
             .catch(err => {
                 console.log('LOGIN Network Error');

@@ -20,4 +20,3 @@ export const loginReducer = function(state = {}, action) {
             return state;
     }
 };
-

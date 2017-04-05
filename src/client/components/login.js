@@ -1,7 +1,8 @@
 
 import React, { Component }             from 'react';
 import { connect }                      from 'react-redux';
-import { loginRequest }                 from '../actions/actions';
+import queryString                      from 'querystring';
+import { loginRequest }                 from '../actions/login';
 
 class LoginView extends Component {
     constructor(props) {
@@ -21,7 +22,9 @@ class LoginView extends Component {
     }
 
     onSubmit() {
-        this.props.dispatch(loginRequest(this.state.username, this.state.password));
+        // See if there is a return parameter in the query-string
+        const search = queryString.parse(this.props.location.search.slice(1));
+        this.props.dispatch(loginRequest(this.state.username, this.state.password, search.return));
     }
 
     render() {

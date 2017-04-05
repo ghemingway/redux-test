@@ -3,11 +3,12 @@
  */
 
 
-export const loginRequest = (username, password) => {
+export const loginRequest = (username, password, ret) => {
     return {
         type: 'LOGIN:REQUEST',
         username: username.toLowerCase().trim(),
-        password: password
+        password: password,
+        return: ret
     }
 };
 

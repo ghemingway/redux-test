@@ -1,5 +1,6 @@
-// Our mutation (Reducer) function,
-// create a _new_ state based on the action passed
+/** Copyright 2017
+ * @author      Graham Hemingway <graham.hemingway@gmail.com>
+ */
 import React, { Component }             from 'react';
 import { render }                       from 'react-dom';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
@@ -8,11 +9,14 @@ import { Router, Route, Redirect }      from 'react-router';
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
 import createHistory                    from 'history/createBrowserHistory';
 
+import { Landing }                      from './components/landing';
+
 import { loginReducer }                 from './reducers/login';
 import { loginMiddleware }              from './middleware/login';
-
-import { Landing }                      from './components/landing';
 import { Login }                        from './components/login';
+
+import { profileReducer }               from './reducers/profile';
+import { profileMiddleware }            from './middleware/profile';
 import { Profile }                      from './components/profile';
 
 const history = createHistory();
@@ -20,9 +24,10 @@ const routerWare = routerMiddleware(history);
 const store = createStore(
     combineReducers({
         login: loginReducer,
+        profile: profileReducer,
         router: routerReducer
     }),
-    applyMiddleware(loginMiddleware, routerWare)
+    applyMiddleware(loginMiddleware, profileMiddleware, routerWare)
 );
 
 render(

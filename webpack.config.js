@@ -8,7 +8,7 @@ module.exports = {
     context: path.join(__dirname, "/src/client"),
     entry: {
         main: "./main",
-        vendor: ["redux"]
+        vendor: ["react", "react-dom", "redux", "react-redux", "react-router", "react-router-redux", "history"]
     },
     output: {
         path: path.join(__dirname, "/public/js/"),

@@ -1,25 +1,48 @@
 // Our mutation (Reducer) function,
 // create a _new_ state based on the action passed
-import { createStore } from 'redux';
-import { reducer } from './reducer';
+import React, { Component }             from 'react';
+import { render }                       from 'react-dom';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import { Provider }                     from 'react-redux';
+import { Router, Route, Redirect }      from 'react-router';
+import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux';
+import createHistory                    from 'history/createBrowserHistory';
 
+import { loginReducer }                 from './reducers/login';
+import { loginMiddleware }              from './middleware/login';
 
-const initialState = {
-    counter: 3
-};
+import { Landing }                      from './components/landing';
+import { Login }                        from './components/login';
+import { Profile }                      from './components/profile';
 
-const store = createStore(reducer, initialState);
+const history = createHistory();
+const routerWare = routerMiddleware(history);
+const store = createStore(
+    combineReducers({
+        login: loginReducer,
+        router: routerReducer
+    }),
+    applyMiddleware(loginMiddleware, routerWare)
+);
 
-// Update view (this might be React in a real app)
-function updateView() {
-    document.querySelector('#counter').innerText = store.getState().counter;
-}
+render(
+    <Provider store={store}>
+        <ConnectedRouter history={history}>
+            <div>
+                <Route exact path="/" component={Landing}/>
+                <Route path="/login" component={Login}/>
+                <Route path="/profile/:user" render={(props) => {
+                    const user = store.getState().login.user;
+                    return typeof(user) === 'object' && !user.error ?
+                        <Profile {...props}/> :
+                        <Redirect to={{
+                            pathname: '/login',
+                            search: `?return=${props.match.url}`
+                        }}/>;
+                }}/>
+            </div>
+        </ConnectedRouter>
+    </Provider>, document.getElementById('primary'));
 
-store.subscribe(updateView);
-// Update view for the first time
-updateView();
-
-// Listen to click events
-document.getElementById('inc').onclick = () => store.dispatch({ type: 'INC' });
-document.getElementById('dec').onclick = () => store.dispatch({ type: 'DEC' });
+// Put store into the global
 window.store = store;

@@ -25,6 +25,9 @@ export const loginMiddleware = ({ getState, dispatch }) => next => action => {
             })
             .then(user => {
                 const path = action.return ? action.return : `/profile/${user.username}`;
+                // Save user info into localStorage
+                localStorage.setItem('login', JSON.stringify({ user: user }));
+                // Dispatch and move on
                 dispatch(loginSuccess(user));
                 dispatch(push(path));
             })

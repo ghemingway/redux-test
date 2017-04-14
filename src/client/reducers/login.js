@@ -2,7 +2,11 @@
  * Created by ghemingway on 4/4/17.
  */
 
-export const loginReducer = function(state = {}, action) {
+// See if there is state to restore from localStorage
+let initial = localStorage.getItem('login');
+initial = initial ? JSON.parse(initial) : {};
+
+export const loginReducer = function(state = initial, action) {
     switch(action.type) {
         case 'LOGIN:REQUEST':
             return Object.assign({}, state, {

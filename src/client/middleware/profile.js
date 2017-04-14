@@ -1,5 +1,4 @@
 
-import { push }                         from 'react-router-redux';
 import { profileSuccess, profileError } from '../actions/profile';
 
 export const profileMiddleware = ({ getState, dispatch }) => next => action => {

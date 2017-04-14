@@ -4,9 +4,27 @@ let path            = require('path'),
     express         = require('express'),
     bodyParser      = require('body-parser'),
     session         = require('express-session'),
-    logger          = require('morgan');
+    logger          = require('morgan'),
+    webpack         = require('webpack'),
+    webpackConfig   = require('../../webpack.config');
 
+// Setup the Express Pipeline
 let app = express();
+
+console.log(webpackConfig.output.publicPath);
+// HMR Configuration
+let compiler = webpack(webpackConfig);
+app.use(require('webpack-dev-middleware')(compiler, {
+    noInfo: true,
+    publicPath: webpackConfig.output.publicPath
+}));
+app.use(require('webpack-hot-middleware')(compiler, {
+    log: console.log,
+    path: '/__webpack_hmr',
+    heartbeat: 10 * 1000
+}));
+
+
 let staticPath = path.join(__dirname, '../../public');
 app.use(express.static(staticPath));
 app.use(logger('dev'));

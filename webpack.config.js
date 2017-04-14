@@ -1,21 +1,23 @@
-let path =      require("path"),
-    webpack =   require("webpack");
+const { join }          = require('path');
+      webpack           =   require("webpack");
 
 
 module.exports = {
     cache: true,
     devtool: "source-map",
-    context: path.join(__dirname, "/src/client"),
-    entry: {
-        main: "./main",
-        vendor: ["react", "react-dom", "redux", "react-redux", "react-router", "react-router-redux", "history"]
-    },
+    context: join(__dirname, "/src/client"),
+    entry: [
+        'react-hot-loader/patch',
+        'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000',
+        './main'
+    ],
+    devServer: { hot: true },
     output: {
-        path: path.join(__dirname, "/public/js/"),
+        path: join(__dirname, "/public/js/"),
         filename: "[name].js",
         chunkFilename: "[id].js",
         sourceMapFilename: "[name].map",
-        publicPath: "/js/"
+        publicPath: "/"
     },
     module: {
         rules: [
@@ -26,12 +28,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new webpack.LoaderOptionsPlugin({
-            debug: true
-        }),
-        new webpack.optimize.CommonsChunkPlugin({
-            name: "vendor",
-            filename: "vendor.js"
-        })
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin()
     ]
 };

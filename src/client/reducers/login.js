@@ -6,7 +6,7 @@
 let initial = localStorage.getItem('login');
 initial = initial ? JSON.parse(initial) : {};
 
-export const loginReducer = function(state = initial, action) {
+export const loginReducer = (state = initial, action) => {
     switch(action.type) {
         case 'LOGIN:REQUEST':
             return Object.assign({}, state, {

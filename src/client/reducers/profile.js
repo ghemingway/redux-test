@@ -2,7 +2,7 @@
  * Created by ghemingway on 4/4/17.
  */
 
-export const profileReducer = function(state = {}, action) {
+export const profileReducer = (state = {}, action) => {
     switch(action.type) {
         case 'PROFILE:REQUEST':
             return Object.assign({}, state, {

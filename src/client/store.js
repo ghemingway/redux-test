@@ -5,14 +5,14 @@
 import { createStore, combineReducers, applyMiddleware }    from 'redux';
 import { routerReducer }                                    from 'react-router-redux';
 
-import { profileReducer }               from './reducers/profile';
+import {profileReducer }                from './reducers/profile';
 import { profileMiddleware }            from './middleware/profile';
 
-import { loginMiddleware }              from './middleware/login';
 import { loginReducer }                 from './reducers/login';
+import { loginMiddleware }              from './middleware/login';
 
 
-export default function configureStore(initialState, routerWare) {
+export const configureStore = (initialState, routerMiddleware) => {
     const store = createStore(
         combineReducers({
             login: loginReducer,
@@ -20,16 +20,20 @@ export default function configureStore(initialState, routerWare) {
             router: routerReducer
         }),
         initialState,
-        applyMiddleware(loginMiddleware, profileMiddleware, routerWare)
+        applyMiddleware(loginMiddleware, profileMiddleware, routerMiddleware)
     );
 
-    if (module.hot) {
-        // Enable Webpack hot module replacement for reducers
-        module.hot.accept('./reducers/profile', () => {
-            const nextRootReducer = require('./reducers/profile');
-            store.replaceReducer(nextRootReducer);
+    // Hot Module Replacement API
+    if (module.hot && process.env.NODE_ENV !== "production") {
+        module.hot.accept(['./store', './reducers/login', './reducers/profile'], () => {
+            console.log('Still working on how to HMR the reducers');
+            const reducer = combineReducers({
+                login: require('./reducers/login').loginReducer,
+                profile: require('./reducers/profile').profileReducer,
+                router: routerReducer
+            });
+            store.replaceReducer(reducer);
         });
     }
-
     return store;
-}
+};

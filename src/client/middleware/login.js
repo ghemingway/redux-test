@@ -3,6 +3,7 @@ import { push }                         from 'react-router-redux';
 import { loginSuccess, loginError }     from '../actions/login';
 
 export const loginMiddleware = ({ getState, dispatch }) => next => action => {
+    //console.log('Foo');
     if (action.type === 'LOGIN:REQUEST') {
         fetch('/v1/session', {
             method: "POST",
@@ -38,3 +39,7 @@ export const loginMiddleware = ({ getState, dispatch }) => next => action => {
     }
     next(action);
 };
+
+if (module.hot) {
+    module.hot.accept('./login');
+}

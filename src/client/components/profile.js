@@ -3,7 +3,7 @@ import React, { Component }             from 'react';
 import { connect }                      from 'react-redux';
 import { profileRequest }               from '../actions/profile';
 
-class ProfileView extends Component {
+class Profile extends Component {
     componentDidMount() {
         this.props.dispatch(profileRequest('graham'));
     }
@@ -16,8 +16,7 @@ class ProfileView extends Component {
     }
 }
 
-const Profile = connect(state => ({
+export default connect(state => ({
     profile: state.profile
-}))(ProfileView);
+}))(Profile);
 
-export { Profile };
